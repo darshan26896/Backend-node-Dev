@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: mahirmansuri/newone:node
+        ports:
+        - containerPort: 30001
+        env:
+        - name: MONGO_URL
+          value: "mongodb://mongo:30017/ETM"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector:
+    app: backend
+  type: NodePort
+  ports:
+  - name: http
+    port: 30001
+    targetPort: 30001
+    nodePort: 30001
